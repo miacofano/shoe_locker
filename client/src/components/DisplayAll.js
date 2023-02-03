@@ -51,6 +51,9 @@ const DisplayAll = () => {
                                             <Link to={`/shoe/${shoe._id}`}>
                                                 <button>Details</button>
                                             </Link>
+                                            <Link to={`/shoe/edit/${shoe._id}`}>
+                                                <button>Edit</button>
+                                            </Link>
                                         </td>
                                     </tr>
                                 );

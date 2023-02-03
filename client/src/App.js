@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import DisplayAll from './components/DisplayAll';
 import ShoeForm from './components/ShoeForm';
 import OneShoe from './components/OneShoe';
+import EditShoeForm from './components/EditShoeForm';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element = {<DisplayAll/>} />
           <Route path="/shoe" element = {<ShoeForm/>} />
           <Route path="/shoe/:id" element = {<OneShoe/>} />
+          <Route path="/shoe/edit/:id" element = {<EditShoeForm/>} />
         </Routes>
       </BrowserRouter>
     </div>

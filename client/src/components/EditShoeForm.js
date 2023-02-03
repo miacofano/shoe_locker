@@ -1,27 +1,43 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const ShoeForm = () => {
-    const [brand, setBrand] = useState("");
-    const [model, setModel] = useState("");
-    const [type, setType] = useState("");
-    const [primaryColor, setPrimaryColor] = useState("");
-    const [secondaryColor, setSecondaryColor] = useState("");
-    const [mileage, setMileage] = useState(0);
+
+const EditShoeForm = () => {
+    const {id} = useParams();
+    const [shoeBrand, setShoeBrand] = useState("");
+    const [shoeModel, setShoeModel] = useState("");
+    const [shoeType, setShoeType] = useState("");
+    const [shoePrimaryColor, setShoePrimaryColor] = useState("");
+    const [shoeSecondaryColor, setShoeSecondaryColor] = useState("");
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
 
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8000/api/shoe/${id}`)
+            .then((response) => {
+                setShoeBrand(response.data.brand);
+                setShoeModel(response.data.model);
+                setShoeType(response.data.type);
+                setShoePrimaryColor(response.data.primaryColor);
+                setShoeSecondaryColor(response.data.secondaryColor);
+            })
+            .catch((err) => {
+                console.log(err.response);
+                setShoeBrand(`Shoe not found using that ID`);
+            });
+    }, []);
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         axios
-            .post("http://localhost:8000/api/shoe", {
-                brand,
-                model,
-                type,
-                primaryColor,
-                secondaryColor,
-                mileage
+            .put(`http://localhost:8000/api/shoe/edit/${id}`, {
+                brand: shoeBrand,
+                model: shoeModel,
+                type: shoeType,
+                primaryColor: shoePrimaryColor,
+                secondaryColor: shoeSecondaryColor
             })
             .then((response) => {
                 console.log(response);
@@ -36,7 +52,7 @@ const ShoeForm = () => {
         <div className="container">
             <div className="row">
                 <div className="col-6">
-                    <h1> New Shoe </h1>
+                    <h1> Edit Shoe </h1>
                 </div>
                 <div className="col-6">
                     <Link to='/'>HOME</Link>
@@ -50,24 +66,24 @@ const ShoeForm = () => {
                                 <input 
                                     type="text" 
                                     className="form-control"
-                                    onChange={(e) => setBrand(e.target.value)}
-                                    value={brand}
+                                    onChange={(e) => setShoeBrand(e.target.value)}
+                                    value={shoeBrand}
                                 />
                                 {errors.brand ? <p>{errors.brand.message}</p>: null}
                                 <label htmlFor="type">Model:</label>
                                 <input 
                                     type="text" 
                                     className="form-control"
-                                    onChange={(e) => setModel(e.target.value)}
-                                    value={model}
+                                    onChange={(e) => setShoeModel(e.target.value)}
+                                    value={shoeModel}
                                 />
                                 {errors.model ? <p>{errors.model.message}</p>: null}
                                 <label htmlFor="type">Type:</label>
                                 <input 
                                     type="text" 
                                     className="form-control"
-                                    onChange={(e) => setType(e.target.value)}
-                                    value={type}
+                                    onChange={(e) => setShoeType(e.target.value)}
+                                    value={shoeType}
                                 />
                             </div>
                             <div className="col-6">
@@ -76,20 +92,20 @@ const ShoeForm = () => {
                                 <input 
                                     type="text" 
                                     className="form-control"
-                                    onChange={(e) => setPrimaryColor(e.target.value)}
-                                    value={primaryColor}
+                                    onChange={(e) => setShoePrimaryColor(e.target.value)}
+                                    value={shoePrimaryColor}
                                 />
                                 <label htmlFor="secondaryColor">Secondary Color:</label>
                                 <input 
                                     type="text" 
                                     className="form-control"
-                                    onChange={(e) => setSecondaryColor(e.target.value)}
-                                    value={secondaryColor}
+                                    onChange={(e) => setShoeSecondaryColor(e.target.value)}
+                                    value={shoeSecondaryColor}
                                 />
                             </div>
                         </div>
                         <div className="col-2">
-                            <button className="btn btn-primary" type ="submit">Add Shoe</button>
+                            <button className="btn btn-primary" type ="submit">Edit Shoe</button>
                         </div>
                     </form>
             </div>
@@ -97,4 +113,4 @@ const ShoeForm = () => {
     );
 };
 
-export default ShoeForm;
+export default EditShoeForm;

@@ -1,8 +1,14 @@
 const mongoose = require('mongoose');
 
 const ShoeSchema = new mongoose.Schema({
-    brand: {type : String},
-    model: {type : String},
+    brand: {
+        type : String,
+        required: [true, "Brand is required."]
+    },
+    model: {
+        type : String,
+        required: [true, "Model is required"]
+    },
     type: {type : String},
     primaryColor: {type: String},
     secondaryColor: {type: String},
